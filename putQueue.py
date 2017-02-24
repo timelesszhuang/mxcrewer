@@ -2,13 +2,12 @@
 # 向 queue 中写数据
 
 import sys
-import threading
-import time
-from mongodbManage import MONGODB
-
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+import threading
+import time
+from mongodbManage import MONGODB
 
 
 class putQueue(threading.Thread):
