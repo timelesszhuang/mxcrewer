@@ -8,7 +8,7 @@ import threading
 from multiprocessing import Queue
 from getQueue import getQueue
 from mysqlManage import DB
-from mxcrewer.putQueue import putQueue
+from putQueue import putQueue
 
 
 # 多线程 中怎么同步 现在已经到哪个数据了

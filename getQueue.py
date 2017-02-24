@@ -4,7 +4,7 @@ import threading
 import time
 from MxInfo import MxManage
 from getWwwwInfo import wwwInfo
-from mxcrewer.mongodbManage import MONGODB
+from mongodbManage import MONGODB
 
 
 

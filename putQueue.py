@@ -4,7 +4,7 @@
 import sys
 import threading
 import time
-from mxcrewer.mongodbManage import MONGODB
+from mongodbManage import MONGODB
 
 
 reload(sys)
