@@ -75,9 +75,9 @@ class putQueue(threading.Thread):
                     mongodb.updateOne(flagWhere, {"$set": {"stop": int(stopnum)}})
                 # 从数据库中获取 上次已经获取到哪了 这次从哪开始   有个问题是如果 数据有变动 会取到重复的值
                 mongodb.getcollection(collection)
-                print("正在获取域名数据" + collection)
+                print "正在获取域名数据" + collection
                 mongodb.findMany(self.q, start, self.qCount)
-                print("已成功获取域名数据" + collection)
+                print "已成功获取域名数据" + collection
                 # 更新mongodb 中的 start 数据 取数据成功
                 mongodb.getcollection('mxmanage_stopnum')
                 mongodb.updateOne(flagWhere, {"$set": {"start": int(start + self.qCount)}})
