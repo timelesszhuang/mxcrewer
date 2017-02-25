@@ -2,10 +2,12 @@
 # 从queue里边读取数据
 import threading
 import time
+
+from pymysql.err import OperationalError
+
 from MxInfo import MxManage
 from getWwwwInfo import wwwInfo
 from mongodbManage import MONGODB
-
 
 
 class getQueue(threading.Thread):
@@ -76,7 +78,7 @@ class getQueue(threading.Thread):
                     }
                 }
             )
-            print self.name + "线程" + data['domain_name'] + '变换标题' + title
+            print self.name + data['domain_name'] + 'change title ' + title
             mongodb.close()
         if not self.getContactFlag:
             return
@@ -114,7 +116,7 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                print self.name + "线程" + data['domain_name'] + '变换咨询工具品牌' + brandinfo['brand_name']
+                print self.name + data['domain_name'] + ' change contact tool ' + brandinfo['brand_name']
         else:
             # 直接追加
             perdata = {
@@ -123,7 +125,7 @@ class getQueue(threading.Thread):
                     'contacttool_changetime': int(time.time())
                 }
             }
-            print self.name + "线程" + data['domain_name'] + '新增咨询工具品牌' + brandinfo['brand_name']
+            print self.name + "线程" + data['domain_name'] + ' add new contact tool' + brandinfo['brand_name']
             mongodb.updateOne(mongodbWhere, perdata)
         mongodb.close()
 
@@ -180,7 +182,7 @@ class getQueue(threading.Thread):
                                     'mx_changetime': int(time.time())
                                 }
                             }
-                        print self.name + "线程" + data['domain_name'] + '变换MX'
+                        print self.name + data['domain_name'] + 'change MX'
                         mongodb.updateOne(mongodbWhere, perdata)
                 else:
                     mongodb.updateOne(
@@ -198,7 +200,7 @@ class getQueue(threading.Thread):
                                 }
                         }
                     )
-                    print self.name + "线程" + data['domain_name'] + '新增MX'
+                    print self.name + data['domain_name'] + ' add MX'
             else:
                 not_classified_suffix = mx_info['mxsuffix']
                 # 需要分类
@@ -244,7 +246,7 @@ class getQueue(threading.Thread):
                                 }
                         }
                     )
-                    print self.name + "线程" + data['domain_name'] + '新增未分类MX记录'
+                    print self.name + data['domain_name'] + 'add not classified MX'
                     mongodb.close()
                 except OperationalError as ex:
                     pass

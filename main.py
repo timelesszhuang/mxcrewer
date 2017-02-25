@@ -10,11 +10,24 @@ from getQueue import getQueue
 from mysqlManage import DB
 from putQueue import putQueue
 
+# 多线程 中怎么同步 现在已经到哪个数据了
+# permanent_coll = ["shandong", "shanxi", "henan", "beijing", "hebei",
+#                   "shanghai", "zhejiang", "aomen", "fujian",
+#                   "anhui", "qinghai", "chongqing",
+#                   "gansu", "guangxi", "guizhou",
+#                   "heilongjiang", "hongkong", "jiangxi",
+#                   "jilin", "liaoning", "neimenggu",
+#                   "ningxia", "other", "qinghai",
+#                   "shanxi2", "taiwan", "tianjin",
+#                   "guangdong", "hainan", "hubei",
+#                   "hunan", "jiangsu", "sichuan",
+#                   "xinjiang", "xizang", "yunnan",
+#                   "cn1", "cn2", "cn3", "cn4", "cn5"]
 
 # 多线程 中怎么同步 现在已经到哪个数据了
-permanent_coll = ["shandong", "shanxi", "henan", "beijing", "hebei",
-                  "shanghai", "zhejiang", "aomen", "fujian",
-                  "anhui", "qinghai", "chongqing",
+permanent_coll = ["beijing", "hebei",
+                  "shanghai", "zhejiang", "aomen",
+                  "fujian","anhui", "qinghai", "chongqing",
                   "gansu", "guangxi", "guizhou",
                   "heilongjiang", "hongkong", "jiangxi",
                   "jilin", "liaoning", "neimenggu",
@@ -55,8 +68,11 @@ threadID = 1
 # 消费者数量 也就是爬取 www mx的线程的数量
 consumerThreadingCount = 100
 
+# 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
+flag = 'shandong'
+
 # # 多线程更新数据
-producerThread = putQueue(threadID, "取数据者", workQueue, queueCount, queueLock, coll)
+producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll, flag)
 producerThread.start()
 threads.append(producerThread)
 
