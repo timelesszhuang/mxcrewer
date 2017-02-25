@@ -78,7 +78,7 @@ class getQueue(threading.Thread):
                     }
                 }
             )
-            print self.name + data['domain_name'] + 'change title '
+            print self.name + data['domain_name'] + ' change title '
             mongodb.close()
         if not self.getContactFlag:
             return
@@ -182,7 +182,7 @@ class getQueue(threading.Thread):
                                     'mx_changetime': int(time.time())
                                 }
                             }
-                        print self.name + data['domain_name'] + 'change MX'
+                        print self.name + data['domain_name'] + ' change MX'
                         mongodb.updateOne(mongodbWhere, perdata)
                 else:
                     mongodb.updateOne(
@@ -246,7 +246,7 @@ class getQueue(threading.Thread):
                                 }
                         }
                     )
-                    print self.name + data['domain_name'] + 'add not classified MX'
+                    print self.name + data['domain_name'] + ' add not classified MX'
                     mongodb.close()
                 except OperationalError as ex:
                     pass
