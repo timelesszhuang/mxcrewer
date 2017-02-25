@@ -78,7 +78,7 @@ class getQueue(threading.Thread):
                     }
                 }
             )
-            print self.name + data['domain_name'] + 'change title ' + title
+            print self.name + data['domain_name'] + 'change title '
             mongodb.close()
         if not self.getContactFlag:
             return
@@ -116,7 +116,7 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                print self.name + data['domain_name'] + ' change contact tool ' + brandinfo['brand_name']
+                print self.name + data['domain_name'] + ' change contact tool '
         else:
             # 直接追加
             perdata = {
@@ -125,7 +125,7 @@ class getQueue(threading.Thread):
                     'contacttool_changetime': int(time.time())
                 }
             }
-            print self.name + "线程" + data['domain_name'] + ' add new contact tool' + brandinfo['brand_name']
+            print self.name + data['domain_name'] + ' add new contact tool'
             mongodb.updateOne(mongodbWhere, perdata)
         mongodb.close()
 
