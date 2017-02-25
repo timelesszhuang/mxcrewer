@@ -96,7 +96,7 @@ if getMxFlag:
 
 # # 创建处理队列的进程 消费者
 for t in range(consumerThreadingCount):
-    thread = getQueue(threadID, "***" + str(threadID) + "号爬虫", workQueue, queueLock, coll, mxsuffix, contacttool_info,
+    thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix, contacttool_info,
                       getMxFlag, getWwwFlag, getContactFlag)
     thread.start()
     threads.append(thread)
