@@ -24,7 +24,6 @@ class wwwInfo:
         #     return {}
         # if not content:
         #     return {}
-
         url = 'http://' + domain
         content = ''
         try:

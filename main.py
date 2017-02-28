@@ -25,18 +25,7 @@ from putQueue import putQueue
 #                   "cn1", "cn2", "cn3", "cn4", "cn5"]
 
 # 多线程 中怎么同步 现在已经到哪个数据了
-permanent_coll = ["beijing", "hebei",
-                  "shanghai", "zhejiang", "aomen",
-                  "fujian","anhui", "qinghai", "chongqing",
-                  "gansu", "guangxi", "guizhou",
-                  "heilongjiang", "hongkong", "jiangxi",
-                  "jilin", "liaoning", "neimenggu",
-                  "ningxia", "other", "qinghai",
-                  "shanxi2", "taiwan", "tianjin",
-                  "guangdong", "hainan", "hubei",
-                  "hunan", "jiangsu", "sichuan",
-                  "xinjiang", "xizang", "yunnan",
-                  "cn1", "cn2", "cn3", "cn4", "cn5"]
+permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
 
 contacttool_info = {
     'qiyukf.com': {'brand_id': 1, 'brand_name': '七鱼智能客服'},
@@ -69,7 +58,7 @@ threadID = 1
 consumerThreadingCount = 100
 
 # 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
-flag = 'shandong'
+flag = 'authority_other'
 
 # # 多线程更新数据
 producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll, flag)
@@ -79,6 +68,10 @@ threads.append(producerThread)
 getWwwFlag = True
 getMxFlag = True
 getContactFlag = True
+
+# 标志是不是需要加载到 客户库中  七鱼的客户库  邮箱的客户库
+addMailCusFlag = True
+addQiyvCusFlag = True
 
 mxsuffix = {}
 if getMxFlag:
@@ -96,8 +89,8 @@ if getMxFlag:
 
 # # 创建处理队列的进程 消费者
 for t in range(consumerThreadingCount):
-    thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix, contacttool_info,
-                      getMxFlag, getWwwFlag, getContactFlag)
+    thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix,
+                      contacttool_info, getMxFlag, getWwwFlag, getContactFlag, addMailCusFlag, addQiyvCusFlag)
     thread.start()
     threads.append(thread)
     threadID += 1
