@@ -18,8 +18,8 @@ class MONGODB:
 
     def connect(self):
         user = "admin"
-        pwd = ""
-        server = ""
+        pwd = "qiangbi123"
+        server = "115.28.161.44"
         port = '27017'
         # 表示 用于授权的
         db_name = "admin"

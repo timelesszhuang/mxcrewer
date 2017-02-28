@@ -9,7 +9,7 @@ class DB:
 
     def connect(self):
 
-        self.conn = mysql.connect(host=self.ip, user='salesmen', passwd='', db='', port=3306,
+        self.conn = mysql.connect(host=self.ip, user='salesmen', passwd='qiangbi123', db='salesmenbeta2', port=3306,
                                   cursorclass=mysql.cursors.DictCursor, charset="utf8")
 
     def query(self, sql):
