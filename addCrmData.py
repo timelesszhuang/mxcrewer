@@ -35,25 +35,3 @@ class addCrmData():
         print insertSql
         db.update(insertSql)
         db.close()
-
-    '''
-    添加七鱼的客户
-    '''
-
-    @classmethod
-    def addQiyvCustomer(self, data, brand_info, coll, flag):
-        # 添加到 mysql 中
-        db = DB()
-        db.connect()
-        brand_id = brand_info['brand_id']
-        brand_name = brand_info['brand_name']
-        title = ''
-        if data['wwwtitle']:
-            title = data['wwwtitle']
-        nowtime = str(int(time.time()))
-        insertSql = "INSERT INTO sm_bigdata_qiyv_customer" \
-                    + "(`object_id`, `domain`,`title`,`flag`,`brand_id`,`brand_name`,`coll`,`addtime`) VALUE ('" \
-                    + str(data['_id']) + "','" + data['domain_name'] + "','" + title + "','" + flag + "','" \
-                    + str(brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
-        print insertSql
-        db.update(insertSql)

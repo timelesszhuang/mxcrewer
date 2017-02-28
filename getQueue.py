@@ -122,8 +122,6 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                if self.addQiyvCusFlag:
-                    addCrmData.addQiyvCustomer(data, brandinfo, collection, 'update')
                 print self.name + domain_name + ' change contact tool '
         else:
             # 直接追加
@@ -135,8 +133,6 @@ class getQueue(threading.Thread):
             }
             print self.name + domain_name + ' add new contact tool'
             mongodb.updateOne(mongodbWhere, perdata)
-            if self.addQiyvCusFlag:
-                addCrmData.addQiyvCustomer(data, brandinfo, collection, 'add')
         mongodb.close()
 
     '''
