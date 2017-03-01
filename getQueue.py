@@ -3,7 +3,6 @@
 import threading
 import time
 
-from django.template.defaultfilters import title
 from pymysql.err import OperationalError
 
 from MxInfo import MxManage
