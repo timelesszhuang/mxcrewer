@@ -44,7 +44,7 @@ class MxManage:
             # print("没有获取到mx数据")
             return {}
         # MxManage.subMxSuffix(mx)
-        return {'priority': priority, 'mx': mx, 'mxsuffix': MxManage.subMxSuffix(mx)}
+        return {'priority': priority, 'mx': mx, 'mxsuffix': MxManage.subMxSuffix(mx.lower())}
 
     '''
     截取mx 后缀信息
