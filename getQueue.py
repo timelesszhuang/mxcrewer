@@ -189,8 +189,11 @@ class getQueue(threading.Thread):
             pre_mx = data['mx']  # 之前的所有mx 信息 包含品牌 品牌id mx 以及优先级
             now_mx = mx_info['mx']
             # 表示品牌不一样
+            if brand_id != 0 and pre_mx['brand_id'] != 0 and pre_mx['brand_id'] == brand_id:
+                # 之前跟现在的品牌 都存在 但是相等的情况下 直接返回
+                return
             if MxManage.subMxSuffix(pre_mx['mx']) != MxManage.subMxSuffix(now_mx):
-                # 表示已经变更 mx 信息包括品牌 还有mx都变更了
+                # 后缀可能不一样 但是 品牌能是一样的
                 perdata = {
                     '$set': {
                         'mx': {
