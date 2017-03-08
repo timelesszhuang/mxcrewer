@@ -23,7 +23,7 @@ class MxManage:
                 return {}
             mxInfo.append(line)
             perMx = line.split(' ')
-            print(perMx)
+            # print(perMx)
             if len(perMx) == 2:
                 # print(perMx[0])
                 # if int(perMx[0]) < priority and priority != 0:
