@@ -32,6 +32,6 @@ class addCrmData():
                     + "(`object_id`, `domain`,`title`,`flag`,`mx`,`brand_id`,`brand_name`,`coll`,`addtime`) VALUE ('" \
                     + str(data['_id']) + "','" + data['domain_name'] + "','" + title + "','" + flag + "','" + \
                     mx_info['mx'] + "','" + str(brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
-        print insertSql
+        # print insertSql
         db.update(insertSql)
         db.close()

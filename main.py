@@ -94,3 +94,61 @@ for t in range(consumerThreadingCount):
     thread.start()
     threads.append(thread)
     threadID += 1
+
+
+
+
+
+
+
+
+# Exception in thread ***1 NO. CREWER :
+# Traceback (most recent call last):
+#   File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
+#     self.run()
+#   File "/home/crewer/mxcrewer/getQueue.py", line 49, in run
+#     self.manageMxInfo(data, collection)
+#   File "/home/crewer/mxcrewer/getQueue.py", line 245, in manageMxInfo
+#     addCrmData.addMailCustomer(data, mx_info, mx_brand_info, collection, 'add')
+#   File "/home/crewer/mxcrewer/addCrmData.py", line 35, in addMailCustomer
+#     print insertSql
+# UnicodeEncodeError: 'ascii' codec can't encode characters in position 174-177: ordinal not in range(1
+# 28)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
