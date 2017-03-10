@@ -24,6 +24,7 @@ from putQueue import putQueue
 #                   "xinjiang", "xizang", "yunnan",
 #                   "cn1", "cn2", "cn3", "cn4", "cn5"]
 
+
 # 多线程 中怎么同步 现在已经到哪个数据了
 permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
 

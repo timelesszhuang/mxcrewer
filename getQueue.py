@@ -177,6 +177,7 @@ class getQueue(threading.Thread):
         if mx_info['mxsuffix'] in self.mx_blacklist_suffix:
             print self.name + data['domain_name'] + ' mx suffix in blacklist'
             return
+
         if self.mxSuffix.has_key(mx_info['mxsuffix']):
             mx_brand_info = self.mxSuffix[mx_info['mxsuffix']]
             brand_id = mx_brand_info['brand_id']
@@ -207,7 +208,7 @@ class getQueue(threading.Thread):
                 db.close()
             except OperationalError as ex:
                 pass
-        # 更新mx
+
         # 首先需要添加
         if data.has_key('mx'):
             # 表示存在包含数据 匹配下是不是一致  不一致需要更新数据
@@ -218,14 +219,14 @@ class getQueue(threading.Thread):
                 # 之前跟现在的品牌 都存在 但是相等的情况下 直接返回
                 return
             if MxManage.subMxSuffix(pre_mx['mx']) != MxManage.subMxSuffix(now_mx):
-                # 后缀可能不一样 但是 品牌能是一样的
                 perdata = {
                     '$set': {
                         'mx': {
                             'mx': mx_info['mx'],
                             'priority': mx_info['priority'],
                             'brand_id': brand_id,
-                            'brand_name': brand_name
+                            'brand_name': brand_name,
+                            'addtime': int(time.time())
                         },
                         'mx_changetime': int(time.time())
                     },
@@ -247,7 +248,8 @@ class getQueue(threading.Thread):
                                 'mx': mx_info['mx'],
                                 'priority': mx_info['priority'],
                                 'brand_id': brand_id,
-                                'brand_name': brand_name
+                                'brand_name': brand_name,
+                                'addtime': int(time.time())
                             },
                             'mx_changetime': int(time.time())
                         }
@@ -262,7 +264,8 @@ class getQueue(threading.Thread):
                         'mx': mx_info['mx'],
                         'priority': mx_info['priority'],
                         'brand_id': brand_id,
-                        'brand_name': brand_name
+                        'brand_name': brand_name,
+                        'addtime': int(time.time()),
                     },
                     'mx_changetime': int(time.time())
                 }
