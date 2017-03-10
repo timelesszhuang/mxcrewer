@@ -15,8 +15,8 @@ from mysqlManage import DB
 class getQueue(threading.Thread):
     # 继承父类threading.Thread
 
-    def __init__(self, threadID, name, q, queueLock, coll, mxSuffix, contacttool_info, getMxFlag=True,
-                 getWwwFlag=True, getContactFlag=True, addMailCusFlag=True, addQiyvCusFlag=True):
+    def __init__(self, threadID, name, q, queueLock, coll, mxSuffix, contacttool_info, mx_blacklist_suffix,
+                 getMxFlag=True, getWwwFlag=True, getContactFlag=True, addMailCusFlag=True, addQiyvCusFlag=True):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
@@ -31,6 +31,7 @@ class getQueue(threading.Thread):
         self.contacttool_info = contacttool_info
         self.addMailCusFlag = addMailCusFlag
         self.addQiyvCusFlag = addQiyvCusFlag
+        self.mx_blacklist_suffix = mx_blacklist_suffix
 
     '''
     处理 数据遍历
@@ -143,6 +144,8 @@ class getQueue(threading.Thread):
         mx_info = MxManage.startParseMx(domain_name)
         if not mx_info.has_key('mxsuffix'):
             return
+        if not mx_info.has_key('mxrecord'):
+            return
         mongodbWhere = {"_id": data['_id']}
         # mongodb 操作对象初始化
         mongodb = MONGODB()
@@ -152,6 +155,28 @@ class getQueue(threading.Thread):
         mx_brand_info = {}
         brand_id = 0
         brand_name = ''
+        # 是不是已经存在之前的mx记录  用于以后判断 mx 变更
+        if not data.has_key('mxrecord'):
+            mxrecord = mx_info['mxrecord']
+            perdata = {
+                '$set': {
+                    'mxrecord': mxrecord
+                }
+            }
+            mongodb.updateOne(mongodbWhere, perdata)
+            print self.name + data['domain_name'] + ' append mxrecord'
+        else:
+            mxrecord = mx_info['mxrecord']
+            # 匹配下是不是有不一样的
+            pre_mxrecord = data['mxrecord']
+            if set(pre_mxrecord).issubset(set(mxrecord)):
+                return
+            else:
+                pass
+        # 后缀在 黑名单中 直接返回  有些后缀天天变化
+        if mx_info['mxsuffix'] in self.mx_blacklist_suffix:
+            print self.name + data['domain_name'] + ' mx suffix in blacklist'
+            return
         if self.mxSuffix.has_key(mx_info['mxsuffix']):
             mx_brand_info = self.mxSuffix[mx_info['mxsuffix']]
             brand_id = mx_brand_info['brand_id']

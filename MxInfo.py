@@ -13,7 +13,7 @@ class MxManage:
     def startParseMx(self, domain_name):
         command = 'dig -t mx +short ' + domain_name
         r = os.popen(command)  # 执行该命令
-        mxInfo = list()
+        mxrecord = list()
         priority = 0
         for line in r.readlines():  # 依次读取每行
             line = line.strip()  # 去掉每行头尾空白
@@ -21,7 +21,6 @@ class MxManage:
             if ';; connection timed out;' in line:
                 # print('获取mx 超时')
                 return {}
-            mxInfo.append(line)
             perMx = line.split(' ')
             # print(perMx)
             if len(perMx) == 2:
@@ -38,13 +37,14 @@ class MxManage:
                 mx = perMx[1]
             else:
                 mx = perMx[0]
+            mxrecord.append(mx)
         # print mxInfo
-        if len(mxInfo) == 0:
+        if len(mxrecord) == 0:
             # 没有获取到
             # print("没有获取到mx数据")
             return {}
         # MxManage.subMxSuffix(mx)
-        return {'priority': priority, 'mx': mx, 'mxsuffix': MxManage.subMxSuffix(mx.lower())}
+        return {'priority': priority, 'mx': mx, 'mxsuffix': MxManage.subMxSuffix(mx.lower()), 'mxrecord': mxrecord}
 
     '''
     截取mx 后缀信息
@@ -74,6 +74,5 @@ class MxManage:
             else:
                 suffix = mxlist[len(mxlist) - i - 1]
         return suffix
-
 
 # print MxManage.startParseMx('huaxinplastic.com')

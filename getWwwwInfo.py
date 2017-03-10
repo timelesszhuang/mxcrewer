@@ -77,7 +77,6 @@ class wwwInfo:
                     #     description = soup.find(attrs={"name": "DESCRIPTION"})
                     #     if description:
                     #         description = description['content']
-
                     # return {'title': title, 'keywords': keywords, 'description': description}
             return title
         except Exception as ex:
