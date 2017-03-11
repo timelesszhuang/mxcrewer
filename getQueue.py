@@ -16,7 +16,7 @@ class getQueue(threading.Thread):
     # 继承父类threading.Thread
 
     def __init__(self, threadID, name, q, queueLock, coll, mxSuffix, contacttool_info, mx_blacklist_suffix,
-                 getMxFlag=True, getWwwFlag=True, getContactFlag=True, addMailCusFlag=True, addQiyvCusFlag=True):
+                 getMxFlag=True, getWwwFlag=True, getContactFlag=True, addMailCusFlag=True):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
@@ -30,7 +30,6 @@ class getQueue(threading.Thread):
         # 需不需要获取
         self.contacttool_info = contacttool_info
         self.addMailCusFlag = addMailCusFlag
-        self.addQiyvCusFlag = addQiyvCusFlag
         self.mx_blacklist_suffix = mx_blacklist_suffix
 
     '''
@@ -167,12 +166,10 @@ class getQueue(threading.Thread):
             print self.name + data['domain_name'] + ' append mxrecord'
         else:
             mxrecord = mx_info['mxrecord']
-            # 匹配下是不是有不一样的
+            # 匹配下 原始的 mx 记录
             pre_mxrecord = data['mxrecord']
             if set(pre_mxrecord).issubset(set(mxrecord)):
                 return
-            else:
-                pass
         # 后缀在 黑名单中 直接返回  有些后缀天天变化
         if mx_info['mxsuffix'] in self.mx_blacklist_suffix:
             print self.name + data['domain_name'] + ' mx suffix in blacklist'

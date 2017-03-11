@@ -10,6 +10,7 @@ from getQueue import getQueue
 from mysqlManage import DB
 from putQueue import putQueue
 
+
 # 多线程 中怎么同步 现在已经到哪个数据了
 # permanent_coll = ["shandong", "shanxi", "henan", "beijing", "hebei",
 #                   "shanghai", "zhejiang", "aomen", "fujian",
@@ -28,6 +29,7 @@ from putQueue import putQueue
 # 多线程 中怎么同步 现在已经到哪个数据了
 permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
 
+
 mx_blacklist_suffix = [
     'skrimple.com',
     'post-host.com',
@@ -37,6 +39,7 @@ mx_blacklist_suffix = [
     'dragonparking.com',
     'bouncemx.com',
     'dnsdun.com',
+    'namebrightmail.com',
 ];
 
 contacttool_info = {
@@ -103,7 +106,7 @@ if getMxFlag:
 for t in range(consumerThreadingCount):
     thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix,
                       contacttool_info, mx_blacklist_suffix, getMxFlag, getWwwFlag, getContactFlag, addMailCusFlag,
-                      addQiyvCusFlag)
+                      )
     thread.start()
     threads.append(thread)
     threadID += 1
