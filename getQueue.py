@@ -120,7 +120,7 @@ class getQueue(threading.Thread):
                         '404' not in brandInfo['title'] and brandInfo['title'] != 'IIS7' and \
                         '无法' not in brandInfo['title'] and '赌' not in brandInfo['title'] and \
                         'sale' not in brandInfo['title'] and '娱乐' not in brandInfo['title']:
-            print domainName + ' get mailtitle ' + brandInfo['title']
+            print domainName + ' get mailtitle '
             # 更新mailtitle
             mongodb.updateOne(
                 mongodbWhere,
