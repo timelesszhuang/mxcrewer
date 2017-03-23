@@ -10,7 +10,6 @@ from getQueue import getQueue
 from mysqlManage import DB
 from putQueue import putQueue
 
-
 # 多线程 中怎么同步 现在已经到哪个数据了
 # permanent_coll = ["shandong", "shanxi", "henan", "beijing", "hebei",
 #                   "shanghai", "zhejiang", "aomen", "fujian",
@@ -28,7 +27,6 @@ from putQueue import putQueue
 
 # 多线程 中怎么同步 现在已经到哪个数据了
 permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
-
 
 mx_blacklist_suffix = [
     'skrimple.com',
@@ -62,6 +60,19 @@ contacttool_info = {
     'kf5.com': {'brand_id': 16, 'brand_name': '逸创云客服'}
 }
 
+# 域名自建相关数据
+mailSelfBuildInfo = {
+    'coremail': {'brand_id': 1, 'brand_name': '盈世'},
+    'fangmail': {'brand_id': 2, 'brand_name': '方向标'},
+    'winmail': {'brand_id': 3, 'brand_name': 'winmail'},
+    'anymacro': {'brand_id': 4, 'brand_name': '安宁'},
+    'turbomail': {'brand_id': 5, 'brand_name': 'TurboMail'},
+    'u-mail': {'brand_id': 6, 'brand_name': 'U-Mail'},
+    'exchange': {'brand_id': 7, 'brand_name': 'Exchange'},
+    'microsoftonline': {'brand_id': 8, 'brand_name': '微软Office365'},
+    'NiceWebMail': {'brand_id': 9, 'brand_name': 'NiceWebMail'},
+}
+
 # 首先需要 浅复制数据 否则 coll 中的数据会被覆盖
 coll = copy.copy(permanent_coll)
 queueLock = threading.Lock()
@@ -80,20 +91,19 @@ producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock,
 producerThread.start()
 threads.append(producerThread)
 
-getMxFlag = True
+getMxFlag = False
 getWwwFlag = False
 getContactFlag = False
 
 # 标志是不是需要加载到 客户库中  七鱼的客户库  邮箱的客户库
-addMailCusFlag = True
-addQiyvCusFlag = True
-
+addMailCusFlag = False
+# 标志是不是需要 进入 mail.域名 获取匹配信息
+getSelfBuildFlag = True
 mxsuffix = {}
 if getMxFlag:
     # 从数据库中获取 mx 以及品牌的相关数据
     db = DB()
     db.connect()
-    # sql = "select s.mxsuffix,s.brand_id,b.name from sm_mx_suffix as s left join sm_mx_brand as b on b.id=s.brand_id"
     sql = "select s.mxsuffix,s.brand_id,b.name from sm_mx_suffix as s left join sm_mx_brand as b on b.id=s.brand_id"
     stepCursor = db.query(sql)
     rows = stepCursor.fetchall()
@@ -105,28 +115,10 @@ if getMxFlag:
 # # 创建处理队列的进程 消费者
 for t in range(consumerThreadingCount):
     thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix,
-                      contacttool_info, mx_blacklist_suffix, getMxFlag, getWwwFlag, getContactFlag, addMailCusFlag,
+                      contacttool_info, mx_blacklist_suffix, mailSelfBuildInfo, getMxFlag, getWwwFlag, getContactFlag,
+                      addMailCusFlag,
+                      getSelfBuildFlag
                       )
     thread.start()
     threads.append(thread)
     threadID += 1
-
-
-
-
-
-
-
-
-# Exception in thread ***1 NO. CREWER :
-# Traceback (most recent call last):
-#   File "/usr/lib/python2.7/threading.py", line 810, in __bootstrap_inner
-#     self.run()
-#   File "/home/crewer/mxcrewer/getQueue.py", line 49, in run
-#     self.manageMxInfo(data, collection)
-#   File "/home/crewer/mxcrewer/getQueue.py", line 245, in manageMxInfo
-#     addCrmData.addMailCustomer(data, mx_info, mx_brand_info, collection, 'add')
-#   File "/home/crewer/mxcrewer/addCrmData.py", line 35, in addMailCustomer
-#     print insertSql
-# UnicodeEncodeError: 'ascii' codec can't encode characters in position 174-177: ordinal not in range(1
-# 28)

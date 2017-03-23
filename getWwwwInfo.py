@@ -89,10 +89,58 @@ class wwwInfo:
                 return info
         return {}
 
-# # 测试数据
-# contacttool_info = {
-#     'qiyukf.com': {'brand_id': 1, 'brand_name': '七鱼智能客服'},
-# }
-# #
-# # # print wwwInfo.start_parse('qiangbi.net', contacttool_info, True)
-# print wwwInfo.start_parse('qiyukf.com', contacttool_info, True)
+    '''
+    解析下 mail.域名 的信息
+    '''
+
+    @classmethod
+    def startParseMailIndex(self, domain, mailSelfBuildInfo):
+        url = 'http://mail.' + domain
+        content = ''
+        try:
+            content = urllib2.urlopen(url, timeout=10)
+            if not content:
+                url = 'http://www.' + domain
+                content = urllib2.urlopen(url, timeout=10)
+        except Exception as ex:
+            return {}
+        if not content:
+            return {}
+        brandInfo = {}
+        html = ''
+        try:
+            html = content.read()
+        except Exception as e:
+            return {}
+        title = wwwInfo.get_meta_info(html)
+        try:
+            brandInfo = wwwInfo.getSelfBuildInfo(html, mailSelfBuildInfo)
+        except Exception as e:
+            pass
+        return {'title': title, 'brandInfo': brandInfo}
+
+    '''
+    获取自建的相关信息
+    '''
+
+    @classmethod
+    def getSelfBuildInfo(self, content, mailSelfBuildInfo):
+        for (domain, info) in mailSelfBuildInfo.items():
+            if domain in content:
+                return info
+        return {}
+
+
+# 域名自建相关数据
+mailSelfBuildInfo = {
+    'coremail': {'brand_id': 1, 'brand_name': '盈世'},
+    'fangmail': {'brand_id': 2, 'brand_name': '方向标'},
+    'winmail': {'brand_id': 3, 'brand_name': 'winmail'},
+    'anymacro': {'brand_id': 4, 'brand_name': '安宁'},
+    'turbomail': {'brand_id': 5, 'brand_name': 'TurboMail'},
+    'u-mail': {'brand_id': 6, 'brand_name': 'U-Mail'},
+    'exchange': {'brand_id': 7, 'brand_name': 'Exchange'},
+    'microsoftonline': {'brand_id': 8, 'brand_name': '微软Office365'},
+}
+
+# print wwwInfo.startParseMailIndex('jxfhgarment.com', mailSelfBuildInfo)
