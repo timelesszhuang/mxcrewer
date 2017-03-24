@@ -26,7 +26,20 @@ from putQueue import putQueue
 
 
 # 多线程 中怎么同步 现在已经到哪个数据了
-permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
+# permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
+
+permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5",
+                  "shanghai", "zhejiang", "aomen", "fujian",
+                  "anhui", "qinghai", "chongqing",
+                  "gansu", "guangxi", "guizhou",
+                  "heilongjiang", "hongkong", "jiangxi",
+                  "jilin", "liaoning", "neimenggu",
+                  "ningxia", "other", "qinghai",
+                  "shanxi2", "taiwan", "tianjin",
+                  "guangdong", "hainan", "hubei",
+                  "hunan", "jiangsu", "sichuan",
+                  "xinjiang", "xizang", "yunnan",
+                  ]
 
 mx_blacklist_suffix = [
     'skrimple.com',
@@ -84,7 +97,7 @@ threadID = 1
 consumerThreadingCount = 100
 
 # 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
-flag = 'shandonghenan'
+flag = 'cn'
 
 # # 多线程更新数据
 producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll, flag)
