@@ -5,6 +5,7 @@ import os
 
 
 class MxManage:
+
     '''
     解析ｍｘ数据
     '''

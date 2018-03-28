@@ -26,20 +26,22 @@ from putQueue import putQueue
 
 
 # 多线程 中怎么同步 现在已经到哪个数据了
-# permanent_coll = ["shandong", "henan", "hebei", "shanxi"]
+permanent_coll = ["shandong", "henan", "hebei","beijing", "shanxi"]
 
-permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5",
-                  "shanghai", "zhejiang", "aomen", "fujian",
-                  "anhui", "qinghai", "chongqing",
-                  "gansu", "guangxi", "guizhou",
-                  "heilongjiang", "hongkong", "jiangxi",
-                  "jilin", "liaoning", "neimenggu",
-                  "ningxia", "other", "qinghai",
-                  "shanxi2", "taiwan", "tianjin",
-                  "guangdong", "hainan", "hubei",
-                  "hunan", "jiangsu", "sichuan",
-                  "xinjiang", "xizang", "yunnan",
-                  ]
+
+# permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5",
+#                   "shanghai", "zhejiang", "aomen", "fujian",
+#                   "anhui", "qinghai", "chongqing",
+#                   "gansu", "guangxi", "guizhou",
+#                   "heilongjiang", "hongkong", "jiangxi",
+#                   "jilin", "liaoning", "neimenggu",
+#                   "ningxia", "other", "qinghai",
+#                   "shanxi2", "taiwan", "tianjin",
+#                   "guangdong", "hainan", "hubei",
+#                   "hunan", "jiangsu", "sichuan",
+#                   "xinjiang", "xizang", "yunnan",
+#                   ]
+
 
 mx_blacklist_suffix = [
     'skrimple.com',
@@ -51,7 +53,7 @@ mx_blacklist_suffix = [
     'bouncemx.com',
     'dnsdun.com',
     'namebrightmail.com',
-];
+]
 
 contacttool_info = {
     'qiyukf.com': {'brand_id': 1, 'brand_name': '七鱼智能客服'},
@@ -94,7 +96,7 @@ workQueue = Queue(queueCount)
 threads = []
 threadID = 1
 # 消费者数量 也就是爬取 www mx的线程的数量
-consumerThreadingCount = 100
+consumerThreadingCount = 200
 
 # 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
 flag = 'cn'
@@ -104,7 +106,7 @@ producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock,
 producerThread.start()
 threads.append(producerThread)
 
-getMxFlag = False
+getMxFlag = True
 getWwwFlag = False
 getContactFlag = False
 
@@ -129,9 +131,7 @@ if getMxFlag:
 for t in range(consumerThreadingCount):
     thread = getQueue(threadID, "***" + str(threadID) + " NO. CREWER ", workQueue, queueLock, coll, mxsuffix,
                       contacttool_info, mx_blacklist_suffix, mailSelfBuildInfo, getMxFlag, getWwwFlag, getContactFlag,
-                      addMailCusFlag,
-                      getSelfBuildFlag
-                      )
+                      addMailCusFlag, getSelfBuildFlag)
     thread.start()
     threads.append(thread)
     threadID += 1
