@@ -107,11 +107,11 @@ producerThread.start()
 threads.append(producerThread)
 
 getMxFlag = True
-getWwwFlag = False
-getContactFlag = False
+getWwwFlag = True
+getContactFlag = True
 
 # 标志是不是需要加载到 客户库中  七鱼的客户库  邮箱的客户库
-addMailCusFlag = False
+addMailCusFlag = True
 # 标志是不是需要 进入 mail.域名 获取匹配信息
 getSelfBuildFlag = True
 mxsuffix = {}
