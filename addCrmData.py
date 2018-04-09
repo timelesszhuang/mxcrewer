@@ -13,7 +13,6 @@ class addCrmData():
     coll 表示是哪个 mongodb 集合中的数据
     flag 表示是 添加还是 更新
     '''
-
     @classmethod
     def addMailCustomer(self, data, mx_info, brand_info, coll, flag):
         # 添加到 mysql 中
@@ -22,7 +21,7 @@ class addCrmData():
         brand_id = 0
         brand_name = ''
         title = ''
-        if data['wwwtitle']:
+        if 'wwwtitle' in data.keys() and  data['wwwtitle']:
             title = data['wwwtitle']
         if brand_info.has_key('brand_id'):
             brand_id = brand_info['brand_id']
