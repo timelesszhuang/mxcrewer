@@ -5,7 +5,7 @@ import pymysql as mysql
 class DB:
     conn = None
     flag = None
-    ip = 'rdsfjnifbfjnifbo.mysql.rds.aliyuncs.com'
+    ip = ''
 
     def connect(self):
         self.conn = mysql.connect(host=self.ip, user='salesmen', passwd='', db='', port=3306,
