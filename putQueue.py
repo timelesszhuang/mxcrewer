@@ -1,10 +1,6 @@
 # coding=utf-8
 # 向 queue 中写数据
 
-import sys
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import threading
 import time
 from mongodbManage import MONGODB
@@ -73,9 +69,9 @@ class putQueue(threading.Thread):
                     mongodb.updateOne(flagWhere, {"$set": {"stop": int(stopnum)}})
                 # 从数据库中获取 上次已经获取到哪了 这次从哪开始   有个问题是如果 数据有变动 会取到重复的值
                 mongodb.getcollection(collection)
-                print "producing data" + collection
+                print("producing data" + collection)
                 mongodb.findMany(self.q, start, self.qCount)
-                print "produced data" + collection
+                print("produced data" + collection)
                 # 更新mongodb 中的 start 数据 取数据成功
                 mongodb.getcollection(num_coll)
                 mongodb.updateOne(flagWhere, {"$set": {"start": int(start + self.qCount)}})

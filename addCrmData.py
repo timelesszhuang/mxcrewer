@@ -23,7 +23,7 @@ class addCrmData():
         title = ''
         if 'wwwtitle' in data.keys() and  data['wwwtitle']:
             title = data['wwwtitle']
-        if brand_info.has_key('brand_id'):
+        if 'brand_id' in  brand_info:
             brand_id = brand_info['brand_id']
             brand_name = brand_info['brand_name']
         nowtime = str(int(time.time()))

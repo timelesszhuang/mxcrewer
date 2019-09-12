@@ -17,10 +17,10 @@ class MONGODB:
     '''
 
     def connect(self):
-        user = ""
-        pwd = ""
-        server = ""
-        port = ''
+        user = "admin"
+        pwd = "qiangbi123"
+        server = "115.28.161.44"
+        port = '27017'
         # 表示 用于授权的
         db_name = "admin"
         uri = 'mongodb://' + user + ':' + pwd + '@' + server + ':' + port + '/' + db_name
@@ -101,9 +101,9 @@ class MONGODB:
         # db.Info.find_one({'$and': [{'$text': {'$search': "Hello"}, 'Username': 'John Doe'}]},
         #                  {"Expenses.description": 1, "fullName_normal": 1})
         cursor = self.collection.find().skip(start).limit(count)
-        print start
-        print count
-        print cursor
+        print(start)
+        print(count)
+        print(cursor)
         try:
             for data in cursor:
                 queue.put(data)
@@ -112,7 +112,7 @@ class MONGODB:
             else:
                 return False
         except Exception as ex:
-            print "failed get data" + ex.message
+            print("failed get data" + ex.message)
 
     '''
     统计字段信息

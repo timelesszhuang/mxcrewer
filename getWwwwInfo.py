@@ -1,8 +1,8 @@
 # coding=utf-8
 # 获取网站的www 信息
+import urllib.request
 
 from bs4 import BeautifulSoup
-import urllib2
 
 
 class wwwInfo:
@@ -27,10 +27,10 @@ class wwwInfo:
         url = 'http://' + domain
         content = ''
         try:
-            content = urllib2.urlopen(url, timeout=10)
+            content = urllib.request.urlopen(url, timeout=10)
             if not content:
                 url = 'http://www.' + domain
-                content = urllib2.urlopen(url, timeout=10)
+                content = urllib.request.urlopen(url, timeout=10)
         except Exception as ex:
             return {}
         if not content:
@@ -98,10 +98,10 @@ class wwwInfo:
         url = 'http://mail.' + domain
         content = ''
         try:
-            content = urllib2.urlopen(url, timeout=10)
+            content = urllib.reequest.urlopen(url, timeout=10)
             if not content:
                 url = 'http://www.' + domain
-                content = urllib2.urlopen(url, timeout=10)
+                content = urllib.reequest.urlopen(url, timeout=10)
         except Exception as ex:
             return {}
         if not content:

@@ -66,7 +66,7 @@ class getQueue(threading.Thread):
         # 获取网站的标题
         domain_name = data['domain_name']
         wwwtitle = ''
-        if data.has_key('wwwtitle'):
+        if 'wwwtitle' in data:
             wwwtitle = data['wwwtitle']
         htmlInfo = wwwInfo.start_parse(domain_name, self.contacttool_info, self.getContactFlag)
         title = ''
@@ -88,7 +88,7 @@ class getQueue(threading.Thread):
                     }
                 }
             )
-            print self.name + data['domain_name'] + ' change title '
+            print(self.name + data['domain_name'] + ' change title ')
             data['wwwtitle'] = title
             mongodb.close()
         if not self.getContactFlag:
@@ -114,13 +114,13 @@ class getQueue(threading.Thread):
         mongodb.connect()
         mongodb.getdb('mxmanage')
         mongodb.getcollection(collection)
-        if brandInfo.has_key('title') and brandInfo['title'] != '' and brandInfo['title'] != 'LNMP一键安装包 by Licess' and \
+        if 'title' in brandInfo  and brandInfo['title'] != '' and brandInfo['title'] != 'LNMP一键安装包 by Licess' and \
                         brandInfo['title'] != None and '卖' not in brandInfo['title'] and \
                         '售' not in brandInfo['title'] and '错' not in brandInfo['title'] and \
                         '404' not in brandInfo['title'] and brandInfo['title'] != 'IIS7' and \
                         '无法' not in brandInfo['title'] and '赌' not in brandInfo['title'] and \
                         'sale' not in brandInfo['title'] and '娱乐' not in brandInfo['title']:
-            print domainName + ' get mailtitle '
+            print(domainName + ' get mailtitle ')
             # 更新mailtitle
             mongodb.updateOne(
                 mongodbWhere,
@@ -131,8 +131,8 @@ class getQueue(threading.Thread):
                 }
             )
 
-        if brandInfo.has_key('brandInfo') and len(brandInfo['brandInfo']) != 0:
-            print domainName + ' get self build mail info'
+        if 'brandInfo' in brandInfo  and len(brandInfo['brandInfo']) != 0:
+            print(domainName + ' get self build mail info')
             mongodb.updateOne(
                 mongodbWhere,
                 {
@@ -155,7 +155,7 @@ class getQueue(threading.Thread):
         mongodb.getdb('mxmanage')
         mongodb.getcollection(collection)
         # 比对文章分类
-        if data.has_key('contacttool'):
+        if 'contacttool' in data:
             contacttool_info = data['contacttool']
             pre_brand = contacttool_info['brand_id']
             if pre_brand != brandinfo['brand_id']:
@@ -170,7 +170,7 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                print self.name + domain_name + ' change contact tool '
+                print(self.name + domain_name + ' change contact tool ')
         else:
             # 直接追加
             perdata = {
@@ -179,7 +179,7 @@ class getQueue(threading.Thread):
                     'contacttool_changetime': int(time.time())
                 }
             }
-            print self.name + domain_name + ' add new contact tool'
+            print(self.name + domain_name + ' add new contact tool')
             mongodb.updateOne(mongodbWhere, perdata)
         mongodb.close()
 
@@ -190,9 +190,9 @@ class getQueue(threading.Thread):
     def manageMxInfo(self, data, collection):
         domain_name = data['domain_name']
         mx_info = MxManage.startParseMx(domain_name)
-        if not mx_info.has_key('mxsuffix'):
+        if not 'mxsuffix' in mx_info:
             return
-        if not mx_info.has_key('mxrecord'):
+        if not 'mxrecord' in mx_info:
             return
         mongodbWhere = {"_id": data['_id']}
         # mongodb 操作对象初始化
@@ -204,7 +204,7 @@ class getQueue(threading.Thread):
         brand_id = 0
         brand_name = ''
         # 是不是已经存在之前的mx记录  用于以后判断 mx 变更
-        if not data.has_key('mxrecord'):
+        if not 'mxrecord' in data:
             mxrecord = mx_info['mxrecord']
             perdata = {
                 '$set': {
@@ -212,7 +212,7 @@ class getQueue(threading.Thread):
                 }
             }
             mongodb.updateOne(mongodbWhere, perdata)
-            print self.name + data['domain_name'] + ' append mxrecord'
+            print(self.name + data['domain_name'] + ' append mxrecord')
         else:
             mxrecord = mx_info['mxrecord']
             # 匹配下 原始的 mx 记录
@@ -221,10 +221,10 @@ class getQueue(threading.Thread):
                 return
         # 后缀在 黑名单中 直接返回  有些后缀天天变化
         if mx_info['mxsuffix'] in self.mx_blacklist_suffix:
-            print self.name + data['domain_name'] + ' mx suffix in blacklist'
+            print(self.name + data['domain_name'] + ' mx suffix in blacklist')
             return
 
-        if self.mxSuffix.has_key(mx_info['mxsuffix']):
+        if mx_info['mxsuffix'] in self.mxSuffix:
             mx_brand_info = self.mxSuffix[mx_info['mxsuffix']]
             brand_id = mx_brand_info['brand_id']
             brand_name = mx_brand_info['brand_name']
@@ -256,7 +256,7 @@ class getQueue(threading.Thread):
                 pass
 
         # 首先需要添加
-        if data.has_key('mx'):
+        if 'mx' in data:
             # 表示存在包含数据 匹配下是不是一致  不一致需要更新数据
             pre_mx = data['mx']  # 之前的所有mx 信息 包含品牌 品牌id mx 以及优先级
             now_mx = mx_info['mx']
@@ -282,7 +282,7 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                print self.name + data['domain_name'] + ' change MX'
+                print(self.name + data['domain_name'] + ' change MX')
                 if self.addMailCusFlag:
                     addCrmData.addMailCustomer(data, mx_info, mx_brand_info, collection, 'update')
             else:
@@ -300,7 +300,7 @@ class getQueue(threading.Thread):
                             'mx_changetime': int(time.time())
                         }
                     }
-                    print self.name + data['domain_name'] + ' update brand info'
+                    print(self.name + data['domain_name'] + ' update brand info')
                     mongodb.updateOne(mongodbWhere, perdata)
         else:
             # 有可能更新品牌信息 但是mx 没有变更
@@ -316,7 +316,7 @@ class getQueue(threading.Thread):
                     'mx_changetime': int(time.time())
                 }
             }
-            print self.name + data['domain_name'] + ' add MX'
+            print(self.name + data['domain_name'] + ' add MX')
             mongodb.updateOne(mongodbWhere, perdata)
             if self.addMailCusFlag:
                 addCrmData.addMailCustomer(data, mx_info, mx_brand_info, collection, 'add')

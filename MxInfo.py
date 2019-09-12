@@ -12,7 +12,7 @@ class MxManage:
 
     @classmethod
     def startParseMx(self, domain_name):
-        command = 'dig -t mx +short ' + domain_name
+        command = 'dig -t mx +time=5 +tries=1 +short ' + domain_name
         r = os.popen(command)  # 执行该命令
         mxrecord = list()
         priority = 0
