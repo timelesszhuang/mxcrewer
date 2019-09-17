@@ -254,7 +254,6 @@ class getQueue(threading.Thread):
                 db.close()
             except OperationalError as ex:
                 pass
-
         # 首先需要添加
         if 'mx' in data:
             # 表示存在包含数据 匹配下是不是一致  不一致需要更新数据

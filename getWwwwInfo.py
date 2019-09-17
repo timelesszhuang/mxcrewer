@@ -98,10 +98,10 @@ class wwwInfo:
         url = 'http://mail.' + domain
         content = ''
         try:
-            content = urllib.reequest.urlopen(url, timeout=10)
+            content = urllib.request.urlopen(url, timeout=10)
             if not content:
                 url = 'http://www.' + domain
-                content = urllib.reequest.urlopen(url, timeout=10)
+                content = urllib.request.urlopen(url, timeout=10)
         except Exception as ex:
             return {}
         if not content:

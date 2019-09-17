@@ -1,21 +1,24 @@
 # coding=utf-8
 # 向 queue 中写数据
-
+import copy
 import threading
 import time
+from copy import copy
+
 from mongodbManage import MONGODB
 
 
 class putQueue(threading.Thread):
     # 继承父类threading.Thread
 
-    def __init__(self, threadID, name, q, qCount, queueLock, coll, flag):
+    def __init__(self, threadID, name, q, qCount, queueLock, coll, permanent_coll, flag):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         self.q = q
         self.queueLock = queueLock
         self.coll = coll
+        self.permanent_coll = permanent_coll
         self.qCount = qCount
         self.flag = flag
 
@@ -47,8 +50,8 @@ class putQueue(threading.Thread):
                         mongodb.getcollection(num_coll)
                         mongodb.updateOne(flagWhere, {"$set": {"stop": 0, "start": 0, "collection": self.coll[0]}})
                     else:
-                        # 表示便利完成数据
-                        exit()
+                        # 表示便利完成 
+                        self.coll = copy.copy(self.permanent_coll)
                     self.queueLock.release()
                     continue
                 if collection != current_coll:
