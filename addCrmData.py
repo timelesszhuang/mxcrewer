@@ -23,13 +23,13 @@ class addCrmData():
         title = ''
         if 'wwwtitle' in data.keys() and  data['wwwtitle']:
             title = data['wwwtitle']
-        if 'brand_id' in  brand_info:
-            brand_id = brand_info['brand_id']
-            brand_name = brand_info['brand_name']
-        nowtime = str(int(time.time()))
-        insertSql = "INSERT INTO sm_bigdata_mail_customer" \
-                    + "(`object_id`, `domain`,`title`,`flag`,`mx`,`brand_id`,`brand_name`,`coll`,`addtime`) VALUE ('" \
-                    + str(data['_id']) + "','" + data['domain_name'] + "','" + title + "','" + flag + "','" + \
-                    mx_info['mx'] + "','" + str(brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
-        db.update(insertSql)
-        db.close()
+            if 'brand_id' in  brand_info:
+                brand_id = brand_info['brand_id']
+                brand_name = brand_info['brand_name']
+            nowtime = str(int(time.time()))
+            insertSql = "INSERT INTO sm_bigdata_mail_customer" \
+                        + "(`object_id`, `domain`,`title`,`flag`,`mx`,`brand_id`,`brand_name`,`coll`,`addtime`) VALUE ('" \
+                        + str(data['_id']) + "','" + data['domain_name'] + "','" + title + "','" + flag + "','" + \
+                        mx_info['mx'] + "','" + str(brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
+            db.update(insertSql)
+            db.close()

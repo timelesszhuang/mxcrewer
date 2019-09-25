@@ -3,7 +3,6 @@
 import copy
 import threading
 import time
-from copy import copy
 
 from mongodbManage import MONGODB
 
@@ -50,8 +49,9 @@ class putQueue(threading.Thread):
                         mongodb.getcollection(num_coll)
                         mongodb.updateOne(flagWhere, {"$set": {"stop": 0, "start": 0, "collection": self.coll[0]}})
                     else:
-                        # 表示便利完成 
-                        self.coll = copy.copy(self.permanent_coll)
+                        for province in self.permanent_coll:
+                            self.coll.append(province)
+                        mongodb.updateOne(flagWhere, {"$set": {"stop": 0, "start": 0, "collection": self.coll[0]}})
                     self.queueLock.release()
                     continue
                 if collection != current_coll:

@@ -47,6 +47,7 @@ class getQueue(threading.Thread):
                 data = self.q.get()
                 self.queueLock.release()
                 if self.getWwwFlag:
+                    # 需要把域名设置一些 标志 一些级别
                     self.manageWwwInfo(data, collection)
                 if self.getMxFlag:
                     self.manageMxInfo(data, collection)
@@ -74,8 +75,9 @@ class getQueue(threading.Thread):
         # keywords = None
         if 'title' in htmlInfo:
             title = htmlInfo['title']
-        if title and title != 'Redirect' and title != wwwtitle:
-            # print '该域名已经更新网站标题'
+        else:
+            # 没有网站的
+            status = 'C'
             mongodb = MONGODB()
             mongodb.connect()
             mongodb.getdb('mxmanage')
@@ -84,11 +86,27 @@ class getQueue(threading.Thread):
                 {"_id": data['_id']},
                 {
                     '$set': {
-                        'wwwtitle': title
+                        'status': status
                     }
                 }
             )
-            print(self.name + data['domain_name'] + ' change title ')
+        if title:
+            # print '该域名已经更新网站标题'
+            status = self.checktitle(title)
+            mongodb = MONGODB()
+            mongodb.connect()
+            mongodb.getdb('mxmanage')
+            mongodb.getcollection(collection)
+            mongodb.updateOne(
+                {"_id": data['_id']},
+                {
+                    '$set': {
+                        'wwwtitle': title,
+                        'status': status
+                    }
+                }
+            )
+            print(self.name + data['domain_name'] + ' add title' + title + ' 域名状态为 ' + status)
             data['wwwtitle'] = title
             mongodb.close()
         if not self.getContactFlag:
@@ -98,6 +116,40 @@ class getQueue(threading.Thread):
             brandinfo = htmlInfo['contacttool']
         if brandinfo:
             self.manageContacttoolInfo(data, collection, brandinfo)
+
+    '''
+    验证标题合法性  
+    '''
+
+    def checktitle(self, title, mailtitle=False):
+        # 黑名单域名标志
+        blacklist = ['棋牌', '赌', '娱乐', '博彩', '色情', '担保', '转让', '域名', '成人', '性', '色', '葡京', '彩票', 'av', '黄色', '游戏', '激情网',
+                     '开奖', '配资', '股票', '撸', '真人', '裸聊室', '三级', '体育', 'F1', '车队', '彩', 'pk', 'PK', '开户', '竞技', '投注',
+                     '赛车', '大发', '比分', '皇冠', '澳门', '大奖', '贵宾', '啪啪啪', '充值', '啪', 'AG']
+        # 白名单域名标志
+        whitelist = ['集团', '公司', '政府', '商会', '协会', '医院', '幼儿园', '工作室', '服务中心', 'Co., Ltd.', '厂', '厂家', '研究中心', '机构',
+                     '加盟', '合作社', '旅游', '旅行社', '博物馆', '出版总社', '出版社', '酒店', '事务所', '学校', '大学', '小学', '中学', '销售部']
+        # clist = ['LNMP', 'lnmp', '卖', '错', '404', '502', 'IIS7', '无法', 'sale']
+        # 邮箱登录页面白名单
+        mailwhitelist = ['邮箱', '登陆', '登录', '企业邮箱', '邮件']
+        #  域名分为四种类  A 为能打开且为公司  B 网站有问题打不开 或者不再黑名单中  C 网站暂时打不开为空 D 为黑名单的 没有价值
+        titlestatus = 'B'
+        # 先判断在和名单中
+        for black in blacklist:
+            if black in title:
+                titlestatus = 'D'
+                break
+        # 判断在白名单中
+        if titlestatus is 'B':
+            for white in whitelist:
+                if white in title:
+                    titlestatus = 'A'
+                    break
+        if mailtitle and titlestatus is not 'D':
+            for white in mailwhitelist:
+                if white in title:
+                    titlestatus = 'A'
+        return titlestatus
 
     '''
     自建的项目相关
@@ -114,25 +166,23 @@ class getQueue(threading.Thread):
         mongodb.connect()
         mongodb.getdb('mxmanage')
         mongodb.getcollection(collection)
-        if 'title' in brandInfo  and brandInfo['title'] != '' and brandInfo['title'] != 'LNMP一键安装包 by Licess' and \
-                        brandInfo['title'] != None and '卖' not in brandInfo['title'] and \
-                        '售' not in brandInfo['title'] and '错' not in brandInfo['title'] and \
-                        '404' not in brandInfo['title'] and brandInfo['title'] != 'IIS7' and \
-                        '无法' not in brandInfo['title'] and '赌' not in brandInfo['title'] and \
-                        'sale' not in brandInfo['title'] and '娱乐' not in brandInfo['title']:
-            print(domainName + ' get mailtitle ')
+
+        if 'title' in brandInfo and brandInfo['title'] != '':
+            title = brandInfo['title']
+            status = self.checktitle(title, True)
+            print(self.name + domainName + ' get mailtitle ' + title + ' 域名状态' + status)
             # 更新mailtitle
             mongodb.updateOne(
                 mongodbWhere,
                 {
                     '$set': {
-                        'mailtitle': brandInfo['title']
+                        'mailtitle': brandInfo['title'],
+                        'status': status
                     }
                 }
             )
-
-        if 'brandInfo' in brandInfo  and len(brandInfo['brandInfo']) != 0:
-            print(domainName + ' get self build mail info')
+        if 'brandInfo' in brandInfo and len(brandInfo['brandInfo']) != 0:
+            print(self.name + domainName + ' get self build mail info')
             mongodb.updateOne(
                 mongodbWhere,
                 {
