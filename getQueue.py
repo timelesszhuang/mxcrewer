@@ -2,6 +2,7 @@
 # 从queue里边读取数据
 import threading
 import time
+from itertools import starmap
 
 from pymysql.err import OperationalError
 
@@ -73,11 +74,11 @@ class getQueue(threading.Thread):
         title = ''
         # description = None
         # keywords = None
+        status = 'C'
         if 'title' in htmlInfo:
             title = htmlInfo['title']
         else:
             # 没有网站的
-            status = 'C'
             mongodb = MONGODB()
             mongodb.connect()
             mongodb.getdb('mxmanage')
@@ -109,6 +110,7 @@ class getQueue(threading.Thread):
             print(self.name + data['domain_name'] + ' add title' + title + ' 域名状态为 ' + status)
             data['wwwtitle'] = title
             mongodb.close()
+        data['status'] = status
         if not self.getContactFlag:
             return
         brandinfo = {}
@@ -123,11 +125,12 @@ class getQueue(threading.Thread):
 
     def checktitle(self, title, mailtitle=False):
         # 黑名单域名标志
-        blacklist = ['棋牌', '赌', '娱乐', '博彩', '色情', '担保', '转让', '域名', '成人', '性', '色', '葡京', '彩票', 'av', '黄色', '游戏', '激情网',
-                     '开奖', '配资', '股票', '撸', '真人', '裸聊室', '三级', '体育', 'F1', '车队', '彩', 'pk', 'PK', '开户', '竞技', '投注',
+        blacklist = ['棋牌', '赌', '娱乐', '博彩', '色情', '担保', '转让', '域名', '成人', '性', '葡京', '彩票', 'av', '黄色', '游戏', '激情网',
+                     '开奖', '配资', '股票', '撸', '射', '真人', '裸聊室', '三级', '体育', 'F1', '车队', '彩', 'pk', 'PK', '开户', '竞技', '投注',
                      '赛车', '大发', '比分', '皇冠', '澳门', '大奖', '贵宾', '啪啪啪', '充值', '啪', 'AG']
         # 白名单域名标志
-        whitelist = ['集团', '公司', '政府', '商会', '协会', '医院', '幼儿园', '工作室', '服务中心', 'Co., Ltd.', '厂', '厂家', '研究中心', '机构',
+        whitelist = ['集团', '公司', '政府', '商会', '协会', '医院', '幼儿园', '工作室', '服务中心', 'Co., Ltd.', 'factory', '厂', '厂家',
+                     '研究中心', '机构', '培训中心',
                      '加盟', '合作社', '旅游', '旅行社', '博物馆', '出版总社', '出版社', '酒店', '事务所', '学校', '大学', '小学', '中学', '销售部']
         # clist = ['LNMP', 'lnmp', '卖', '错', '404', '502', 'IIS7', '无法', 'sale']
         # 邮箱登录页面白名单
@@ -149,6 +152,7 @@ class getQueue(threading.Thread):
             for white in mailwhitelist:
                 if white in title:
                     titlestatus = 'A'
+                    break
         return titlestatus
 
     '''

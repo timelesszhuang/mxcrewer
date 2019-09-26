@@ -13,6 +13,7 @@ class addCrmData():
     coll 表示是哪个 mongodb 集合中的数据
     flag 表示是 添加还是 更新
     '''
+
     @classmethod
     def addMailCustomer(self, data, mx_info, brand_info, coll, flag):
         # 添加到 mysql 中
@@ -21,15 +22,16 @@ class addCrmData():
         brand_id = 0
         brand_name = ''
         title = ''
-        if 'wwwtitle' in data.keys() and  data['wwwtitle']:
+        if 'wwwtitle' in data.keys() and data['wwwtitle'] and 'status' in data.keys() and data['status'] is 'A':
             title = data['wwwtitle']
-            if 'brand_id' in  brand_info:
+            if 'brand_id' in brand_info:
                 brand_id = brand_info['brand_id']
                 brand_name = brand_info['brand_name']
             nowtime = str(int(time.time()))
             insertSql = "INSERT INTO sm_bigdata_mail_customer" \
                         + "(`object_id`, `domain`,`title`,`flag`,`mx`,`brand_id`,`brand_name`,`coll`,`addtime`) VALUE ('" \
                         + str(data['_id']) + "','" + data['domain_name'] + "','" + title + "','" + flag + "','" + \
-                        mx_info['mx'] + "','" + str(brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
+                        mx_info['mx'] + "','" + str(
+                brand_id) + "','" + brand_name + "','" + coll + "','" + nowtime + "')"
             db.update(insertSql)
             db.close()
