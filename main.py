@@ -7,6 +7,9 @@ import copy
 import threading
 import urllib.request
 from multiprocessing import Queue
+
+import sys
+
 from getQueue import getQueue
 from mysqlManage import DB
 from putQueue import putQueue
@@ -27,20 +30,12 @@ from putQueue import putQueue
 
 
 # 多线程 中怎么同步 现在已经到哪个数据了
-permanent_coll = ["shandong", "henan", "hebei", "beijing", "shanxi"]
+# permanent_coll = ["shandong", "henan", "hebei", "beijing", "shanxi"]
 
-# permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5",
-#                   "shanghai", "zhejiang", "aomen", "fujian",
-#                   "anhui", "qinghai", "chongqing",
-#                   "gansu", "guangxi", "guizhou",
-#                   "heilongjiang", "hongkong", "jiangxi",
-#                   "jilin", "liaoning", "neimenggu",
-#                   "ningxia", "other", "qinghai",
-#                   "shanxi2", "taiwan", "tianjin",
-#                   "guangdong", "hainan", "hubei",
-#                   "hunan", "jiangsu", "sichuan",
-#                   "xinjiang", "xizang", "yunnan",
-#                   ]
+permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5", "shanghai", "zhejiang", "aomen", "fujian", "anhui", "qinghai",
+                  "chongqing", "gansu", "guangxi", "guizhou", "heilongjiang", "hongkong", "jiangxi", "jilin",
+                  "liaoning", "neimenggu", "ningxia", "other", "qinghai", "shanxi2", "tianjin", "guangdong", "hainan",
+                  "hubei", "hunan", "jiangsu", "sichuan", "xinjiang", "xizang", "yunnan"]
 
 
 mx_blacklist_suffix = [
@@ -86,7 +81,7 @@ mailSelfBuildInfo = {
     'exchange': {'brand_id': 7, 'brand_name': 'Exchange'},
     'microsoftonline': {'brand_id': 8, 'brand_name': '微软Office365'},
     'NiceWebMail': {'brand_id': 9, 'brand_name': 'NiceWebMail'},
-    '/owa/auth.owa':{'brand_id': 54, 'brand_name': '微软outlook'}
+    '/owa/auth.owa': {'brand_id': 10, 'brand_name': '微软outlook'}
 }
 
 # 首先需要 浅复制数据 否则 coll 中的数据会被覆盖
@@ -99,16 +94,14 @@ threadID = 1
 # 消费者数量 也就是爬取 www mx的线程的数量
 consumerThreadingCount = 20
 # 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
-flag = 'cn'
+flag = 'other'
 # # 多线程更新数据
-producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll,permanent_coll, flag)
+producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll, permanent_coll, flag)
 producerThread.start()
 threads.append(producerThread)
-
 getMxFlag = True
 getWwwFlag = True
 getContactFlag = False
-
 # 标志是不是需要加载到 客户库中  七鱼的客户库  邮箱的客户库
 addMailCusFlag = True
 # 标志是不是需要 进入 mail.域名 获取匹配信息

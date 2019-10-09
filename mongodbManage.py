@@ -112,7 +112,8 @@ class MONGODB:
             else:
                 return False
         except Exception as ex:
-            print("failed get data" + ex.message)
+            # print("failed get data" + ex.message)
+            pass
 
     '''
     统计字段信息

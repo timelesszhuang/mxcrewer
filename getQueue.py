@@ -92,7 +92,6 @@ class getQueue(threading.Thread):
                 }
             )
         if title:
-            # print '该域名已经更新网站标题'
             status = self.checktitle(title)
             mongodb = MONGODB()
             mongodb.connect()
@@ -107,7 +106,7 @@ class getQueue(threading.Thread):
                     }
                 }
             )
-            print(self.name + data['domain_name'] + ' add title' + title + ' 域名状态为 ' + status)
+            print(self.name + data['domain_name'] + ' add title' + '  status ' + status)
             data['wwwtitle'] = title
             mongodb.close()
         data['status'] = status
@@ -127,7 +126,7 @@ class getQueue(threading.Thread):
         # 黑名单域名标志
         blacklist = ['棋牌', '赌', '娱乐', '博彩', '色情', '担保', '转让', '域名', '成人', '性', '葡京', '彩票', 'av', '黄色', '游戏', '激情网',
                      '开奖', '配资', '股票', '撸', '射', '真人', '裸聊室', '三级', '体育', 'F1', '车队', '彩', 'pk', 'PK', '开户', '竞技', '投注',
-                     '赛车', '大发', '比分', '皇冠', '澳门', '大奖', '贵宾', '啪啪啪', '充值', '啪', 'AG']
+                     '赛车', '大发', '比分', '皇冠', '澳门', '大奖', '贵宾', '啪啪啪', '充值', '啪', 'AG', '太阳城']
         # 白名单域名标志
         whitelist = ['集团', '公司', '政府', '商会', '协会', '医院', '幼儿园', '工作室', '服务中心', 'Co., Ltd.', 'factory', '厂', '厂家',
                      '研究中心', '机构', '培训中心',
@@ -174,7 +173,7 @@ class getQueue(threading.Thread):
         if 'title' in brandInfo and brandInfo['title'] != '':
             title = brandInfo['title']
             status = self.checktitle(title, True)
-            print(self.name + domainName + ' get mailtitle ' + title + ' 域名状态' + status)
+            print(self.name + domainName + ' get mailtitle ' + ' status:' + status)
             # 更新mailtitle
             mongodb.updateOne(
                 mongodbWhere,
@@ -186,7 +185,7 @@ class getQueue(threading.Thread):
                 }
             )
         if 'brandInfo' in brandInfo and len(brandInfo['brandInfo']) != 0:
-            print(self.name + domainName + ' get self build mail info')
+            # print(self.name + domainName + ' get self build mail info')
             mongodb.updateOne(
                 mongodbWhere,
                 {
@@ -224,7 +223,7 @@ class getQueue(threading.Thread):
                     }
                 }
                 mongodb.updateOne(mongodbWhere, perdata)
-                print(self.name + domain_name + ' change contact tool ')
+                # print(self.name + domain_name + ' change contact tool ')
         else:
             # 直接追加
             perdata = {
@@ -233,7 +232,7 @@ class getQueue(threading.Thread):
                     'contacttool_changetime': int(time.time())
                 }
             }
-            print(self.name + domain_name + ' add new contact tool')
+            # print(self.name + domain_name + ' add new contact tool')
             mongodb.updateOne(mongodbWhere, perdata)
         mongodb.close()
 
