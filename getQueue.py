@@ -242,6 +242,7 @@ class getQueue(threading.Thread):
 
     def manageMxInfo(self, data, collection):
         domain_name = data['domain_name']
+        print(self.name + data['domain_name']+"开始处理")
         mx_info = MxManage.startParseMx(domain_name)
         if not 'mxsuffix' in mx_info:
             return
@@ -282,6 +283,7 @@ class getQueue(threading.Thread):
             brand_id = mx_brand_info['brand_id']
             brand_name = mx_brand_info['brand_name']
         else:
+            return
             # mx 后缀没有 需要添加到数据库中
             try:
                 # 表示没有该brand信息

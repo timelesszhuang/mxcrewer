@@ -30,7 +30,7 @@ from putQueue import putQueue
 # 多线程 中怎么同步 现在已经到哪个数据了
 
 # permanent_coll = ["shandong", "henan", "hebei", "beijing", "shanxi"]
-permanent_coll = ["shandong"]
+permanent_coll = ["shandong", "henan", "beijing"]
 flag = 'shandonghenan'
 
 # permanent_coll = ["cn1", "cn2", "cn3", "cn4", "cn5", "shanghai", "zhejiang", "aomen", "fujian", "anhui", "qinghai",
@@ -93,14 +93,14 @@ workQueue = Queue(queueCount)
 threads = []
 threadID = 1
 # 消费者数量 也就是爬取 www mx的线程的数量
-consumerThreadingCount = 200
+consumerThreadingCount = 40
 # 表示 查询的时候 遍历到的 位置 标志   mxmanage_stopnum
 # # 多线程更新数据
 producerThread = putQueue(threadID, "getdata", workQueue, queueCount, queueLock, coll, permanent_coll, flag)
 producerThread.start()
 threads.append(producerThread)
-getMxFlag = False
-getWwwFlag = True
+getMxFlag = True
+getWwwFlag = False
 getContactFlag = False
 # 标志是不是需要加载到 客户库中  七鱼的客户库  邮箱的客户库
 addMailCusFlag = False
